@@ -19,6 +19,18 @@ internal static partial class BelgiumVat
 
     internal static bool IsFormatValid(string number) => FormatPattern().IsMatch(number);
 
+    /// <remarks>
+    /// The issuing rule for a freshly-registered number sets the check digits to
+    /// <c>97 - (body % 97)</c>, which is always in the range 1-97 and therefore never "00" -
+    /// a body divisible by 97 is issued with check digits "97", not "00". This method instead
+    /// tests the weaker, mathematically equivalent invariant <c>(body + check) % 97 == 0</c>,
+    /// which both "97" and "00" satisfy for such a body. That is intentional and matches
+    /// python-stdnum's <c>stdnum.be.vat.checksum</c> exactly (verified against the reference
+    /// implementation): no real Belgian number ends "00" with a body divisible by 97, so this
+    /// never accepts a genuine number it should reject, but a corrupted number ending "00" in
+    /// that narrow case would pass. See BelgiumChecksumEdgeCaseTests in the test project for the
+    /// pinned reference behavior.
+    /// </remarks>
     internal static bool? IsChecksumValid(string number)
     {
         var body = int.Parse(number[..^CheckDigitsLength]);

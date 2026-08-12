@@ -102,4 +102,67 @@ internal static class VatFixtures
         yield return ["CZ7103192745", "CZ"];
         yield return ["LV32867300679", "LV"];
     }
+
+    /// <summary>
+    /// Supplementary valid numbers, same shape as <see cref="ValidNumbers"/>, that each target
+    /// a specific sub-format or code path not exercised by the one-per-country set above: the
+    /// UK's post-2010 "restarted" checksum range (including its rarer remainder-55 branch), the
+    /// UK's government department / health authority short and extended forms, and the
+    /// Belgian/Greek zero-padding of a shortened legacy number back to full length. Each is
+    /// annotated with its source; entries marked "constructed" have no published python-stdnum
+    /// doctest and are instead hand-derived from, and cross-checked against, the documented
+    /// mod-97 formula.
+    /// </summary>
+    public static IEnumerable<object[]> AdditionalValidNumbers()
+    {
+        // Real: python-stdnum tests/test_gb_vat.doctest, "standard number restarting" -
+        // exercises the >= 100 restarted range with checksum remainder 42.
+        yield return ["GB100190874", "GB", "100190874", true];
+
+        // Constructed: hand-derived 9-digit number in the restarted range (first three digits
+        // 100 >= 100) whose weighted mod-97 sum is 55, the one allowed remainder python-stdnum's
+        // own doctest never happens to hit. Verified against stdnum.gb.vat.validate().
+        yield return ["GB100000145", "GB", "100000145", true];
+
+        // Real: python-stdnum tests/test_gb_vat.doctest, government department / health
+        // authority short form (format-only, no checksum) and extended EU form (mod-97
+        // checksum over digits 6-8 against check digits 9-10).
+        yield return ["GBGD100", "GB", "GD100", false];
+        yield return ["GBHA501", "GB", "HA501", false];
+        yield return ["GBGD888810003", "GB", "GD888810003", true];
+        yield return ["GBHA888856782", "GB", "HA888856782", true];
+
+        // Real: python-stdnum stdnum/be/vat.py doctest number "BE 428759497", given in its
+        // pre-2005 9-digit short form; canonicalizes to the same "0428759497" as the full-length
+        // BE fixture above.
+        yield return ["BE428759497", "BE", "0428759497", true];
+
+        // Real: same underlying number as the EL fixture above ("EL 094259216"), given in its
+        // pre-1998 8-digit short form; canonicalizes to "094259216".
+        yield return ["EL94259216", "EL", "094259216", true];
+    }
+
+    /// <summary>
+    /// Supplementary checksum-negative numbers, same shape as
+    /// <see cref="InvalidChecksumNumbers"/>, that each target a sub-format not covered by the
+    /// one-per-country set above: the UK's extended government department / health authority
+    /// form, France's letter-key scheme, Ireland's legacy format, and Czechia's 9-digit special
+    /// form for individuals without a birth number. All are corrupted variants of a real valid
+    /// number, cross-checked against python-stdnum.
+    /// </summary>
+    public static IEnumerable<object[]> AdditionalInvalidChecksumNumbers()
+    {
+        // Real: python-stdnum tests/test_gb_vat.doctest, "health authority with invalid
+        // checksum".
+        yield return ["GBHA888856700", "GB"];
+
+        // FR K7399859412 (valid letter-key fixture above) with its check key corrupted.
+        yield return ["FRJ7399859412", "FR"];
+
+        // IE 8D79739I (valid legacy-format fixture above) with its check letter corrupted.
+        yield return ["IE8D79739H", "IE"];
+
+        // CZ 640903926 (valid 9-digit special-form fixture above) with its check digit corrupted.
+        yield return ["CZ640903927", "CZ"];
+    }
 }
