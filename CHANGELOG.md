@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-08-21
+
+### Added
+
+- Northern Ireland "XI" VAT numbers. Since the post-Brexit Northern Ireland Protocol, Northern Irish businesses trading goods with the EU use the "XI" prefix instead of "GB". An XI number has the identical structure and check digit algorithm as a United Kingdom number, so "XI" reuses the exact United Kingdom rule (same format, restarted-checksum allowance, and government department / health authority forms) and reports "XI" as the result country code. The two share a single implementation and cannot drift apart.
+
 ## [0.1.0] - 2026-08-12
 
 ### Added

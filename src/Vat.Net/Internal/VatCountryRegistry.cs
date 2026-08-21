@@ -35,6 +35,7 @@ internal static class VatCountryRegistry
             new(FinlandVat.CountryCode, FinlandVat.Canonicalize, FinlandVat.IsFormatValid, FinlandVat.IsChecksumValid),
             new(FranceVat.CountryCode, FranceVat.Canonicalize, FranceVat.IsFormatValid, FranceVat.IsChecksumValid),
             new(UnitedKingdomVat.CountryCode, UnitedKingdomVat.Canonicalize, UnitedKingdomVat.IsFormatValid, UnitedKingdomVat.IsChecksumValid),
+            new(NorthernIrelandVat.CountryCode, NorthernIrelandVat.Canonicalize, NorthernIrelandVat.IsFormatValid, NorthernIrelandVat.IsChecksumValid),
             new(HungaryVat.CountryCode, HungaryVat.Canonicalize, HungaryVat.IsFormatValid, HungaryVat.IsChecksumValid),
             new(IrelandVat.CountryCode, IrelandVat.Canonicalize, IrelandVat.IsFormatValid, IrelandVat.IsChecksumValid),
             new(ItalyVat.CountryCode, ItalyVat.Canonicalize, ItalyVat.IsFormatValid, ItalyVat.IsChecksumValid),
